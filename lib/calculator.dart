@@ -38,74 +38,66 @@ class _CalculatorState extends State<Calculator> {
         operand = "";
         history = "";
       });
-    } else if (buttonText == "+" || buttonText == "-" || buttonText == "*" ||
-        buttonText == "/") {
-      if (num1 == 0) {
-        num1 = double.parse(output);
-        history = "$output $buttonText";
-        operand = buttonText;
+    }
+    else if (buttonText == "+/-") {
+      setState(() {
+        output = "0";
         _output = "";
-      } else {
-        num2 = double.parse(output);
-        switch (operand) {
-          case "+":
-            _output = (num1 + num2).toString();
-            break;
-          case "-":
-            _output = (num1 - num2).toString();
-            break;
-          case "*":
-            _output = (num1 * num2).toString();
-            break;
-          case "/":
-            if (num2 != 0) {
-              _output = (num1 / num2).toString();
-            } else {
-              _output = "Error";
-            }
-            break;
-        }
-        history += " $num2 $buttonText";
-        num1 = double.parse(_output);
-        operand = buttonText;
-        _output = "";
-      }
-    } else if (buttonText == "=") {
-      if (num1 != 0) {
-        num2 = double.parse(output);
-        switch (operand) {
-          case "+":
-            _output = (num1 + num2).toString();
-            break;
-          case "-":
-            _output = (num1 - num2).toString();
-            break;
-          case "*":
-            _output = (num1 * num2).toString();
-            break;
-          case "/":
-            if (num2 != 0) {
-              _output = (num1 / num2).toString();
-            } else {
-              _output = "Error";
-            }
-            break;
-        }
-        history += " $num2";
-        num1 = double.parse(_output);
+        num1 = 0;
+        num2 = 0;
         operand = "";
-        _output = "";
-      }
-    } else {
-      if (output == "0") {
-        _output = buttonText;
+        history = "";
+      });
+    }
+    else if (buttonText == "+" || buttonText == "-" || buttonText == "*" ||
+        buttonText == "/") {
+      num1 = double.parse(output);
+      operand = buttonText;
+      _output = "";
+      history = num1.toString() + operand.toString();
+    }
+    else if (buttonText == ".") {
+      if (_output.contains(".")) {
+        print("Already contains a decimal");
+        return;
       } else {
-        _output += buttonText;
+        _output = _output + buttonText;
       }
     }
+    else if (buttonText == "=") {
+      num2 = double.parse(output);
+
+    if (operand == "+") {
+      _output = (num1 + num2).toString();
+      history = num1.toString() + operand.toString() + num2.toString();
+    }
+    if (operand == "-") {
+      _output = (num1 - num2).toString();
+      history = num1.toString() + operand.toString() + num2.toString();
+    }
+    if (operand == "*") {
+      _output = (num1 * num2).toString();
+      history = num1.toString() + operand.toString() + num2.toString();
+    }
+    if (operand == "/") {
+      _output = (num1 / num2).toString();
+      history = num1.toString() + operand.toString() + num2.toString();
+    }
+    if (operand == "%") {
+      _output = (num1 % num2).toString();
+      history = num1.toString() + operand.toString() + num2.toString();
+    }
+    num1 = 0;
+    num2 = 0;
+    operand = "";
+  }
+    else{
+      _output= _output+buttonText;
+    }
+    print(_output);
+
     setState(() {
       output = _output;
-      print("output${output}");
     });
   }
 
@@ -119,11 +111,17 @@ class _CalculatorState extends State<Calculator> {
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             SizedBox(height: 10),
-            Text(
-              history, style: TextStyle(color: Colors.white, fontSize: 48, fontWeight: FontWeight.bold),
+            Align(
+              alignment: Alignment.topRight,
+              child: Text(
+                history, style: TextStyle(color: Colors.white, fontSize: 48, fontWeight: FontWeight.bold),
+              ),
             ),
-            Text(
-              output, style: TextStyle(color: Colors.white, fontSize: 48, fontWeight: FontWeight.bold),
+            Align(
+              alignment: Alignment.topRight,
+              child: Text(
+                output, style: TextStyle(color: Colors.white, fontSize: 48, fontWeight: FontWeight.bold),
+              ),
             ),
             SizedBox(height: 20),
             Row(
